@@ -2,6 +2,7 @@ package com.example.helloworld
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -9,6 +10,8 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
 class ThirdActivity : AppCompatActivity() {
+    private val TAG = "btaThirdActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -18,6 +21,8 @@ class ThirdActivity : AppCompatActivity() {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
+        Log.d(TAG, "onCreate: The activity is being created.");
 
         val buttonNext: Button = findViewById(R.id.thirdButton)
         buttonNext.setOnClickListener {
