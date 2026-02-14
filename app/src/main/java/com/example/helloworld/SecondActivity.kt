@@ -1,6 +1,7 @@
 package com.example.helloworld
 
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
@@ -13,6 +14,9 @@ class SecondActivity : AppCompatActivity() {
     private val TAG = "btaSecondActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        val bundle = intent.getBundleExtra("locationBundle")
+        val location: Location? = bundle?.getParcelable("location")
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_second)
@@ -29,6 +33,9 @@ class SecondActivity : AppCompatActivity() {
         }
 
         Log.d(TAG, "onCreate: The activity is being created.");
+        if (location != null) {
+            Log.i(TAG, "onCreate: Location[" + location.altitude + "] [" + location.latitude + "] [" + location.longitude + "]")
+        }
 
         val buttonNextB: Button = findViewById(R.id.secondButtonB)
         buttonNextB.setOnClickListener {
