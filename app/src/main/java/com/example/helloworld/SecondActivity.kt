@@ -9,38 +9,24 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 class SecondActivity : AppCompatActivity() {
     private val TAG = "btaSecondActivity"
+    private val tag = "btaSecondActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        val bundle = intent.getBundleExtra("locationBundle")
-        val location: Location? = bundle?.getParcelable("location")
-
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_second)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
+        val recyclerView = findViewById<RecyclerView>(R.id.myRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val lugares = listOf(
+            MyItem(1, "Campus Sur UPM", 40.3894, -3.6266),
+            MyItem(2, "Puerta del Sol", 40.4167, -3.7033),
+            MyItem(3, "Retiro", 40.4153, -3.6839)
+        )
 
-        val buttonNextA: Button = findViewById(R.id.secondButtonA)
-        buttonNextA.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-
-        Log.d(TAG, "onCreate: The activity is being created.");
-        if (location != null) {
-            Log.i(TAG, "onCreate: Location[" + location.altitude + "] [" + location.latitude + "] [" + location.longitude + "]")
-        }
-
-        val buttonNextB: Button = findViewById(R.id.secondButtonB)
-        buttonNextB.setOnClickListener {
-            val intent = Intent(this, ThirdActivity::class.java)
-            startActivity(intent)
-        }
+        recyclerView.adapter = MyAdapter(lugares)
     }
 }
