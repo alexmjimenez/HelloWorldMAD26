@@ -16,6 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloWorld">
         <activity
+            android:name=".OpenStreetMapsActivity"
+            android:exported="false" />
+        <activity
             android:name=".ThirdActivity"
             android:exported="false" />
         <activity
