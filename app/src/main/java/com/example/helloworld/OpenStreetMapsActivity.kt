@@ -10,7 +10,18 @@ import org.osmdroid.views.MapView
 class OpenStreetMapsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Configuration.getInstance().load(this,getSharedPreferences("osmdroid", MODE_PRIVATE))
+        setContentView(R.layout.activity_third)
 
+        val map= findViewById<MapView>(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
+        map.setMultiTouchControls(true)
+
+        val lat = intent.getDoubleExtra("LAT", 40.4167)
+        val lon = intent.getDoubleExtra("LON", -3.7033)
+        val mapController = map.controller
+        mapController.setZoom(18.0)
+        val startPoint = GeoPoint(lat,lon)
+        mapController.setCenter(startPoint)
     }
 }
