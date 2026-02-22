@@ -11,7 +11,7 @@ class OpenStreetMapsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Configuration.getInstance().load(this,getSharedPreferences("osmdroid", MODE_PRIVATE))
-        setContentView(R.layout.activity_third)
+        setContentView(R.layout.activity_open_street_maps)
 
         val map= findViewById<MapView>(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
