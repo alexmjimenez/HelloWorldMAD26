@@ -13,9 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 class SecondActivity : AppCompatActivity() {
-    private val TAG = "btaSecondActivity"
-    private val tag = "btaSecondActivity"
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_second)
@@ -26,7 +23,6 @@ class SecondActivity : AppCompatActivity() {
             MyItem(2, "Puerta del Sol", 40.4167, -3.7033),
             MyItem(3, "Retiro", 40.4153, -3.6839)
         )
-
         recyclerView.adapter = MyAdapter(lugares)
     }
 }
