@@ -10,6 +10,7 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import android.graphics.drawable.BitmapDrawable
 import androidx.core.content.ContextCompat
+import org.osmdroid.views.overlay.Polyline
 
 class OpenStreetMapsActivity : AppCompatActivity() {
     val gymkhanaCoords = listOf(
@@ -59,6 +60,7 @@ class OpenStreetMapsActivity : AppCompatActivity() {
 
         // Add list of markers
         addGymkhanaMarkers(map, gymkhanaCoords, gymkhanaNames, this)
+        addRouteMarkers(map, gymkhanaCoords, gymkhanaNames, this)
     }
 
     fun addGymkhanaMarkers(map: MapView, coords: List<GeoPoint>, names: List<String>, context: Context) {
@@ -70,5 +72,19 @@ class OpenStreetMapsActivity : AppCompatActivity() {
             marker.title = names[i]
             map.overlays.add(marker)
         }
+    }
+
+    fun addRouteMarkers(map: MapView, coords: List<GeoPoint>, names: List<String>, context: Context) {
+        val polyline = Polyline()
+        polyline.setPoints(coords)
+        for (i in coords.indices) {
+            val marker = Marker(map)
+            marker.position = coords[i]
+            marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
+            marker.icon = ContextCompat.getDrawable(context, android.R.drawable.ic_menu_compass) as BitmapDrawable
+            marker.title = names[i]
+            map.overlays.add(marker)
+        }
+        map.overlays.add(polyline)
     }
 }
