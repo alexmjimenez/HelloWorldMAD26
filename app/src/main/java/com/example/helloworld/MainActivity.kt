@@ -17,6 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import org.intellij.lang.annotations.Identifier
 
 class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
@@ -103,5 +104,43 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun showUserIdentifier(){
+        val builder= android.app.AlertDialog.Builder(this)
+        builder.setTitle("Enter user")
+        val input= android.widget.EditText(this)
+        val userIdentifier=getUserIdentifier()
+        if(userIdentifier!=null){
+            input.setText(userIdentifier)
+        }
+
+        builder.setView(input)
+        builder.setPositiveButton("OK"){ dialog, which ->
+            val userInput=input.text.toString()
+            if(userInput.isNotBlank()){
+                saveUserIdentifier(userInput)
+                android.widget.Toast.makeText(this,"User ID saved: $userInput", android.widget.Toast.LENGTH_LONG).show()
+            }else{
+                android.widget.Toast.makeText(this,"User ID cannot be blank", android.widget.Toast.LENGTH_LONG).show()
+            }
+        }
+        builder.setNegativeButton("Cancel"){ dialog, which ->
+            dialog.cancel()
+            android.widget.Toast.makeText(this,"Bye!!!", android.widget.Toast.LENGTH_LONG).show()
+        }
+        builder.show()
+    }
+
+    private fun saveUserIdentifier(userIdentifier: String){
+        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply(){
+            putString("userIdentifier",userIdentifier)
+            apply()
+        }
+    }
+    private fun getUserIdentifier(): String?{
+        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
+        return sharedPreferences.getString("userIdentifier",null)
     }
 }
