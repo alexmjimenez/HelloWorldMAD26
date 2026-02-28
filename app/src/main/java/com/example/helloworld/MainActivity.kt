@@ -41,10 +41,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-
         Log.d(TAG, "onCreate: The activity is being created.");
 
-        //Next navigation to second activity
         val buttonNext: Button = findViewById(R.id.mainButton)
         buttonNext.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
@@ -54,7 +52,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
             startActivity(intent)
         }
 
-        //Next navigation to open street map activity
         val buttonOsm: Button = findViewById(R.id.osmButton)
         buttonOsm.setOnClickListener {
             if (latestLocation != null) {
@@ -67,9 +64,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 Log.e(TAG, "Location not set yet.")
             }
         }
-
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         startLocationUpdates()
+        val userIdentifierButton: Button = findViewById(R.id.userIdentifierButton)
+        userIdentifierButton.setOnClickListener {
+            showUserIdentifier()
+        }
     }
 
     private fun startLocationUpdates() {
@@ -107,9 +107,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val textView: TextView = findViewById(R.id.mainTextView)
         val locationText = getString(R.string.location_text, location.latitude, location.longitude)
         textView.text = locationText
-
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+        val recordSwitch: android.widget.Switch=findViewById(R.id.recordSwitch)
+        if(recordSwitch.isChecked){
+            saveCoordinatesToFile(location.latitude,location.longitude,location.altitude)
+        }
     }
 
     private fun showUserIdentifier(){
@@ -148,5 +151,16 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private fun getUserIdentifier(): String?{
         val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
         return sharedPreferences.getString("userIdentifier",null)
+    }
+
+    private fun saveCoordinatesToFile(latitude: Double,longitude: Double,altitude: Double){
+        val fileName="gps_coordinate.csv"
+        val file=java.io.File(filesDir,fileName)
+        val timestamp=System.currentTimeMillis()
+        val latStr=String.format(java.util.Locale.US, "%.4f",latitude)
+        val lonStr=String.format(java.util.Locale.US,"%.4f",longitude)
+        val altStr=String.format(java.util.Locale.US,"%.4f",altitude)
+
+        file.appendText("$timestamp;$latStr;$lonStr;$altStr\n")
     }
 }
