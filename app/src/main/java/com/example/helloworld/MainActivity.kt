@@ -1,6 +1,7 @@
 package com.example.helloworld
 
 import android.Manifest
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -10,6 +11,8 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -30,12 +33,17 @@ class MainActivity : AppCompatActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        val userIdentifier=getUserIdentifier()
-        if(userIdentifier==null){
+
+        //Check if the user identifier is already saved
+        val userIdentifier = getUserIdentifier()
+        if (userIdentifier == null){
+            //If not, ask for it
             showUserIdentifier()
-        }else{
-            android.widget.Toast.makeText(this,"User ID: $userIdentifier",android.widget.Toast.LENGTH_SHORT).show()
+        } else {
+            //If yes, use it or show it
+            Toast.makeText(this,"User ID: $userIdentifier",android.widget.Toast.LENGTH_SHORT).show()
         }
+
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -109,47 +117,50 @@ class MainActivity : AppCompatActivity(), LocationListener {
         textView.text = locationText
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
-        val recordSwitch: android.widget.Switch=findViewById(R.id.recordSwitch)
+        val recordSwitch: Switch = findViewById(R.id.recordSwitch)
         if(recordSwitch.isChecked){
             saveCoordinatesToFile(location.latitude,location.longitude,location.altitude)
         }
     }
 
     private fun showUserIdentifier(){
-        val builder= android.app.AlertDialog.Builder(this)
+        val builder = AlertDialog.Builder(this)
         builder.setTitle("Enter user")
-        val input= android.widget.EditText(this)
-        val userIdentifier=getUserIdentifier()
-        if(userIdentifier!=null){
+
+        val input = EditText(this)
+        val userIdentifier = getUserIdentifier()
+        if (userIdentifier != null) {
             input.setText(userIdentifier)
         }
 
         builder.setView(input)
-        builder.setPositiveButton("OK"){ dialog, which ->
-            val userInput=input.text.toString()
-            if(userInput.isNotBlank()){
+        builder.setPositiveButton("OK") { dialog, which ->
+            val userInput = input.text.toString()
+            if (userInput.isNotBlank()) {
                 saveUserIdentifier(userInput)
-                android.widget.Toast.makeText(this,"User ID saved: $userInput", android.widget.Toast.LENGTH_LONG).show()
-            }else{
-                android.widget.Toast.makeText(this,"User ID cannot be blank", android.widget.Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"User ID saved: $userInput", Toast.LENGTH_LONG).show()
+            } else {
+                Toast.makeText(this,"User ID cannot be blank", Toast.LENGTH_LONG).show()
             }
         }
-        builder.setNegativeButton("Cancel"){ dialog, which ->
+
+        builder.setNegativeButton("Cancel") { dialog, which ->
             dialog.cancel()
-            android.widget.Toast.makeText(this,"Bye!!!", android.widget.Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Bye!!!", Toast.LENGTH_LONG).show()
         }
+
         builder.show()
     }
 
-    private fun saveUserIdentifier(userIdentifier: String){
-        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
-        sharedPreferences.edit().apply(){
+    private fun saveUserIdentifier(userIdentifier: String) {
+        val sharedPreferences = this.getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        sharedPreferences.edit().apply() {
             putString("userIdentifier",userIdentifier)
             apply()
         }
     }
     private fun getUserIdentifier(): String?{
-        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
+        val sharedPreferences=this.getSharedPreferences("AppPreferences", MODE_PRIVATE)
         return sharedPreferences.getString("userIdentifier",null)
     }
 
