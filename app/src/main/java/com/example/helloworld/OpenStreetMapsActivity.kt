@@ -44,8 +44,8 @@ class OpenStreetMapsActivity : AppCompatActivity() {
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
 
-        val lat = intent.getDoubleExtra("LAT", 40.4167)
-        val lon = intent.getDoubleExtra("LON", -3.7033)
+        val lat = intent.getDoubleExtra("LAT", 40.3894)
+        val lon = intent.getDoubleExtra("LON", -3.6266)
         val mapController = map.controller
         mapController.setZoom(18.0)
         val startPoint = GeoPoint(lat,lon)
