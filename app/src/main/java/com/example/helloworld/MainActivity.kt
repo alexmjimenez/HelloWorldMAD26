@@ -21,6 +21,8 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.intellij.lang.annotations.Identifier
+import java.io.File
+import java.util.Locale
 
 class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
@@ -164,13 +166,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         return sharedPreferences.getString("userIdentifier",null)
     }
 
-    private fun saveCoordinatesToFile(latitude: Double,longitude: Double,altitude: Double){
-        val fileName="gps_coordinate.csv"
-        val file=java.io.File(filesDir,fileName)
-        val timestamp=System.currentTimeMillis()
-        val latStr=String.format(java.util.Locale.US, "%.4f",latitude)
-        val lonStr=String.format(java.util.Locale.US,"%.4f",longitude)
-        val altStr=String.format(java.util.Locale.US,"%.4f",altitude)
+    private fun saveCoordinatesToFile(latitude: Double, longitude: Double, altitude: Double){
+        val fileName = "gps_coordinate.csv"
+        val file = File(filesDir, fileName)
+        val timestamp = System.currentTimeMillis()
+        val latStr = String.format(Locale.US, "%.4f",latitude)
+        val lonStr = String.format(Locale.US,"%.4f",longitude)
+        val altStr = String.format(Locale.US,"%.4f",altitude)
 
         file.appendText("$timestamp;$latStr;$lonStr;$altStr\n")
     }
