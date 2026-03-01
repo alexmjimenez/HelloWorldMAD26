@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import java.io.IOException
 
 class ThirdActivity : AppCompatActivity() {
     private val TAG = "btaThirdActivity"
@@ -29,6 +31,24 @@ class ThirdActivity : AppCompatActivity() {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+        //Display the file contents
+        val tvFileContents: TextView = findViewById(R.id.tvFileContents)
+        tvFileContents.text = readFileContents()
+    }
+
+    fun readFileContents(): String {
+        val fileName = "gps_coordinates.csv"
+        return try {
+            //Open the file from internal storage
+            openFileInput(fileName).bufferedReader().useLines { lines ->
+                lines.fold("") { some, text ->
+                    "$some\n$text"
+                }
+            }
+        } catch (e: IOException) {
+            "Error reading file: ${e.message}"
         }
     }
 }

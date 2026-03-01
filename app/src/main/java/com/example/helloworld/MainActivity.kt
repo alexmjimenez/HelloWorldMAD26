@@ -27,6 +27,7 @@ import java.util.Locale
 class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
+    private lateinit var locationSwitch: Switch
     private val locationPermissionCode = 2
 
     var latestLocation: Location? = null
@@ -62,6 +63,15 @@ class MainActivity : AppCompatActivity(), LocationListener {
             startActivity(intent)
         }
 
+        val buttonFiles: Button = findViewById(R.id.filesButton)
+        buttonFiles.setOnClickListener {
+            val intent = Intent(this, ThirdActivity::class.java)
+            val bundle = Bundle()
+            bundle.putParcelable("location", latestLocation)
+            intent.putExtra("locationBundle", bundle)
+            startActivity(intent)
+        }
+
         val buttonOsm: Button = findViewById(R.id.osmButton)
         buttonOsm.setOnClickListener {
             if (latestLocation != null) {
@@ -74,11 +84,23 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 Log.e(TAG, "Location not set yet.")
             }
         }
+
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         startLocationUpdates()
         val userIdentifierButton: Button = findViewById(R.id.userIdentifierButton)
         userIdentifierButton.setOnClickListener {
             showUserIdentifier()
+        }
+
+        locationSwitch = findViewById(R.id.locationSwitch)
+        locationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                locationSwitch.text = "Disable location"
+                startLocationUpdates()
+            } else {
+                locationSwitch.text = "Enable location"
+                stopLocationUpdates()
+            }
         }
     }
 
@@ -101,6 +123,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
+    private fun stopLocationUpdates() {
+        locationManager.removeUpdates(this)
+    }
+
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == locationPermissionCode) {
@@ -119,10 +146,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
         textView.text = locationText
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
-        val recordSwitch: Switch = findViewById(R.id.recordSwitch)
-        if(recordSwitch.isChecked){
-            saveCoordinatesToFile(location.latitude,location.longitude,location.altitude)
-        }
+        saveCoordinatesToFile(location.latitude,location.longitude,location.altitude)
     }
 
     private fun showUserIdentifier(){
