@@ -159,7 +159,7 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun saveCoordinatesToFile(latitude: Double,longitude: Double,altitude: Double){
-        val fileName="gps_coordinate.csv"
+        val fileName="gps_coordinates.csv"
         val file=java.io.File(filesDir,fileName)
         val timestamp=System.currentTimeMillis()
         val latStr=String.format(java.util.Locale.US, "%.4f",latitude)
