@@ -70,6 +70,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
         userIdentifierButton.setOnClickListener {
             showUserIdentifier()
         }
+        val filesButton: Button = findViewById(R.id.filesButton)
+        filesButton.setOnClickListener {
+            val intent = Intent(this, ThirdActivity::class.java)
+            startActivity(intent)
+        }
     }
 
     private fun startLocationUpdates() {
