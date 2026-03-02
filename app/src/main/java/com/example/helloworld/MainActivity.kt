@@ -1,7 +1,6 @@
 package com.example.helloworld
 
 import android.Manifest
-import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -11,8 +10,6 @@ import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
-import android.widget.EditText
-import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -21,13 +18,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.intellij.lang.annotations.Identifier
-import java.io.File
-import java.util.Locale
 
 class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
-    private lateinit var locationSwitch: Switch
     private val locationPermissionCode = 2
 
     var latestLocation: Location? = null
@@ -36,17 +30,12 @@ class MainActivity : AppCompatActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-
-        //Check if the user identifier is already saved
-        val userIdentifier = getUserIdentifier()
-        if (userIdentifier == null){
-            //If not, ask for it
+        val userIdentifier=getUserIdentifier()
+        if(userIdentifier==null){
             showUserIdentifier()
-        } else {
-            //If yes, use it or show it
-            Toast.makeText(this,"User ID: $userIdentifier",android.widget.Toast.LENGTH_SHORT).show()
+        }else{
+            android.widget.Toast.makeText(this,"User ID: $userIdentifier",android.widget.Toast.LENGTH_SHORT).show()
         }
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -57,15 +46,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val buttonNext: Button = findViewById(R.id.mainButton)
         buttonNext.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
-            val bundle = Bundle()
-            bundle.putParcelable("location", latestLocation)
-            intent.putExtra("locationBundle", bundle)
-            startActivity(intent)
-        }
-
-        val buttonFiles: Button = findViewById(R.id.filesButton)
-        buttonFiles.setOnClickListener {
-            val intent = Intent(this, ThirdActivity::class.java)
             val bundle = Bundle()
             bundle.putParcelable("location", latestLocation)
             intent.putExtra("locationBundle", bundle)
@@ -84,23 +64,11 @@ class MainActivity : AppCompatActivity(), LocationListener {
                 Log.e(TAG, "Location not set yet.")
             }
         }
-
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         startLocationUpdates()
         val userIdentifierButton: Button = findViewById(R.id.userIdentifierButton)
         userIdentifierButton.setOnClickListener {
             showUserIdentifier()
-        }
-
-        locationSwitch = findViewById(R.id.locationSwitch)
-        locationSwitch.setOnCheckedChangeListener { _, isChecked ->
-            if (isChecked) {
-                locationSwitch.text = "Disable location"
-                startLocationUpdates()
-            } else {
-                locationSwitch.text = "Enable location"
-                stopLocationUpdates()
-            }
         }
     }
 
@@ -123,11 +91,6 @@ class MainActivity : AppCompatActivity(), LocationListener {
         }
     }
 
-    private fun stopLocationUpdates() {
-        locationManager.removeUpdates(this)
-    }
-
-
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == locationPermissionCode) {
@@ -146,57 +109,57 @@ class MainActivity : AppCompatActivity(), LocationListener {
         textView.text = locationText
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
-        saveCoordinatesToFile(location.latitude,location.longitude,location.altitude)
+        val recordSwitch: android.widget.Switch=findViewById(R.id.locationSwitch)
+        if(recordSwitch.isChecked){
+            saveCoordinatesToFile(location.latitude,location.longitude,location.altitude)
+        }
     }
 
     private fun showUserIdentifier(){
-        val builder = AlertDialog.Builder(this)
+        val builder= android.app.AlertDialog.Builder(this)
         builder.setTitle("Enter user")
-
-        val input = EditText(this)
-        val userIdentifier = getUserIdentifier()
-        if (userIdentifier != null) {
+        val input= android.widget.EditText(this)
+        val userIdentifier=getUserIdentifier()
+        if(userIdentifier!=null){
             input.setText(userIdentifier)
         }
 
         builder.setView(input)
-        builder.setPositiveButton("OK") { dialog, which ->
-            val userInput = input.text.toString()
-            if (userInput.isNotBlank()) {
+        builder.setPositiveButton("OK"){ dialog, which ->
+            val userInput=input.text.toString()
+            if(userInput.isNotBlank()){
                 saveUserIdentifier(userInput)
-                Toast.makeText(this,"User ID saved: $userInput", Toast.LENGTH_LONG).show()
-            } else {
-                Toast.makeText(this,"User ID cannot be blank", Toast.LENGTH_LONG).show()
+                android.widget.Toast.makeText(this,"User ID saved: $userInput", android.widget.Toast.LENGTH_LONG).show()
+            }else{
+                android.widget.Toast.makeText(this,"User ID cannot be blank", android.widget.Toast.LENGTH_LONG).show()
             }
         }
-
-        builder.setNegativeButton("Cancel") { dialog, which ->
+        builder.setNegativeButton("Cancel"){ dialog, which ->
             dialog.cancel()
-            Toast.makeText(this,"Bye!!!", Toast.LENGTH_LONG).show()
+            android.widget.Toast.makeText(this,"Bye!!!", android.widget.Toast.LENGTH_LONG).show()
         }
-
         builder.show()
     }
 
-    private fun saveUserIdentifier(userIdentifier: String) {
-        val sharedPreferences = this.getSharedPreferences("AppPreferences", MODE_PRIVATE)
-        sharedPreferences.edit().apply() {
+    private fun saveUserIdentifier(userIdentifier: String){
+        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
+        sharedPreferences.edit().apply(){
             putString("userIdentifier",userIdentifier)
             apply()
         }
     }
     private fun getUserIdentifier(): String?{
-        val sharedPreferences=this.getSharedPreferences("AppPreferences", MODE_PRIVATE)
+        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
         return sharedPreferences.getString("userIdentifier",null)
     }
 
-    private fun saveCoordinatesToFile(latitude: Double, longitude: Double, altitude: Double){
-        val fileName = "gps_coordinate.csv"
-        val file = File(filesDir, fileName)
-        val timestamp = System.currentTimeMillis()
-        val latStr = String.format(Locale.US, "%.4f",latitude)
-        val lonStr = String.format(Locale.US,"%.4f",longitude)
-        val altStr = String.format(Locale.US,"%.4f",altitude)
+    private fun saveCoordinatesToFile(latitude: Double,longitude: Double,altitude: Double){
+        val fileName="gps_coordinate.csv"
+        val file=java.io.File(filesDir,fileName)
+        val timestamp=System.currentTimeMillis()
+        val latStr=String.format(java.util.Locale.US, "%.4f",latitude)
+        val lonStr=String.format(java.util.Locale.US,"%.4f",longitude)
+        val altStr=String.format(java.util.Locale.US,"%.4f",altitude)
 
         file.appendText("$timestamp;$latStr;$lonStr;$altStr\n")
     }
