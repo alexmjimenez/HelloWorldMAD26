@@ -3,17 +3,17 @@
     <item
         android:id="@+id/main"
         android:title="Main"
-        android:icon="@mipmap/ic_launcher_monochrome"/>
+        android:icon="@drawable/home_24"/>
     <item
         android:id="@+id/map"
         android:title="Map"
-        android:icon="@mipmap/ic_launcher_monochrome"/>
+        android:icon="@drawable/map_24"/>
     <item
         android:id="@+id/location"
         android:title="Locations"
-        android:icon="@mipmap/ic_launcher_monochrome"/>
+        android:icon="@drawable/location_24"/>
     <item
         android:id="@+id/info"
         android:title="Info"
-        android:icon="@mipmap/ic_launcher_monochrome"/>
+        android:icon="@drawable/info_24"/>
 </menu>

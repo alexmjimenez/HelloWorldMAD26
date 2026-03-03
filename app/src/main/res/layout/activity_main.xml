@@ -80,7 +80,7 @@
         android:background="#FFF3E0"
         app:iconLabelHorizontalSpacing="16dp"
         app:itemActiveIndicatorStyle="@style/Theme.BottomNavigationView.ActiveIndicator"
-        app:itemIconSize="32dp"
+        app:itemIconSize="24dp"
         app:itemIconTint="@color/tab_color"
         app:itemRippleColor="#4CFFE0B2"
         app:itemTextColor="@color/tab_color"
