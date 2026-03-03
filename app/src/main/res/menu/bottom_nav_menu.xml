@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/main"
+        android:title="Main"
+        android:icon="@mipmap/ic_launcher_monochrome"/>
+    <item
+        android:id="@+id/map"
+        android:title="Map"
+        android:icon="@mipmap/ic_launcher_monochrome"/>
+    <item
+        android:id="@+id/location"
+        android:title="Locations"
+        android:icon="@mipmap/ic_launcher_monochrome"/>
+    <item
+        android:id="@+id/info"
+        android:title="Info"
+        android:icon="@mipmap/ic_launcher_monochrome"/>
+</menu>
