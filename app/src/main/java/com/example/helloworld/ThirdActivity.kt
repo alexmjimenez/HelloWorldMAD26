@@ -3,7 +3,9 @@ package com.example.helloworld
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -26,29 +28,34 @@ class ThirdActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate: The activity is being created.");
 
-        val buttonNext: Button = findViewById(R.id.thirdButton)
+        val buttonNext: Button = findViewById(R.id.mapButton)
         buttonNext.setOnClickListener {
             val intent = Intent(this, SecondActivity::class.java)
             startActivity(intent)
             finish()
         }
 
+        val buttonToThird: Button = findViewById(R.id.homeButton)
+        buttonToThird.setOnClickListener {
+            val intent = Intent(this, MainActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
         //Display the file contents
-        val tvFileContents: TextView = findViewById(R.id.tvFileContents)
-        tvFileContents.text = readFileContents()
+        val listView: ListView = findViewById(R.id.lvFileContents)
+        //tvFileContents.text = readFileContents()
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, readFileLines())
+        listView.adapter = adapter
     }
 
-    fun readFileContents(): String {
+    fun readFileLines(): List<String> {
         val fileName = "gps_coordinates.csv"
         return try {
             //Open the file from internal storage
-            openFileInput(fileName).bufferedReader().useLines { lines ->
-                lines.fold("") { some, text ->
-                    "$some\n$text"
-                }
-            }
+            openFileInput(fileName).bufferedReader().readLines()
         } catch (e: IOException) {
-            "Error reading file: ${e.message}"
+            listOf("Error reading file: ${e.message}")
         }
     }
 }
