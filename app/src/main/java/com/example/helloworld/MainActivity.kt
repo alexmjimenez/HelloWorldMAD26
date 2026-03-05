@@ -9,72 +9,68 @@ import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
 import android.util.Log
+import android.view.MenuItem
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import androidx.drawerlayout.widget.DrawerLayout
+import com.google.android.material.navigation.NavigationView
 import org.intellij.lang.annotations.Identifier
 
-class MainActivity : AppCompatActivity(), LocationListener {
+class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNavigationItemSelectedListener {
     private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
-
     var latestLocation: Location? = null
+
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+
+        Log.d(TAG, "onCreate: The activity is being created.");
+
         val userIdentifier=getUserIdentifier()
         if(userIdentifier==null){
             showUserIdentifier()
         }else{
-            android.widget.Toast.makeText(this,"User ID: $userIdentifier",android.widget.Toast.LENGTH_SHORT).show()
+            Toast.makeText(this,"User ID: $userIdentifier",Toast.LENGTH_SHORT).show()
         }
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.drawer_layout)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
-        Log.d(TAG, "onCreate: The activity is being created.");
 
-        val buttonNext: Button = findViewById(R.id.mainButton)
-        buttonNext.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
-            val bundle = Bundle()
-            bundle.putParcelable("location", latestLocation)
-            intent.putExtra("locationBundle", bundle)
-            startActivity(intent)
-        }
+        drawerLayout = findViewById(R.id.drawer_layout)
+        val navView: NavigationView = findViewById(R.id.nav_view)
+        navView.setNavigationItemSelectedListener(this)
 
-        val buttonOsm: Button = findViewById(R.id.osmButton)
-        buttonOsm.setOnClickListener {
-            if (latestLocation != null) {
-                val intent = Intent(this, OpenStreetMapsActivity::class.java)
-                val bundle = Bundle()
-                bundle.putParcelable("location", latestLocation)
-                intent.putExtra("locationBundle", bundle)
-                startActivity(intent)
-            }else{
-                Log.e(TAG, "Location not set yet.")
-            }
-        }
-        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        startLocationUpdates()
+        val toggle = ActionBarDrawerToggle(
+            this, drawerLayout, R.string.navigation_drawer_open, R.string.navigation_drawer_close
+        )
+        drawerLayout.addDrawerListener(toggle)
+        toggle.syncState()
+
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
         val userIdentifierButton: Button = findViewById(R.id.userIdentifierButton)
         userIdentifierButton.setOnClickListener {
             showUserIdentifier()
         }
-        val filesButton: Button = findViewById(R.id.filesButton)
-        filesButton.setOnClickListener {
-            val intent = Intent(this, ThirdActivity::class.java)
-            startActivity(intent)
-        }
+
+        locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        startLocationUpdates()
     }
 
     private fun startLocationUpdates() {
@@ -167,5 +163,34 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val altStr=String.format(java.util.Locale.US,"%.4f",altitude)
 
         file.appendText("$timestamp;$latStr;$lonStr;$altStr\n")
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.home -> {
+                // Handle home action
+            }
+            R.id.second_activity -> {
+                val intent = Intent(this, SecondActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.third_activity -> {
+                val intent = Intent(this, ThirdActivity::class.java)
+                startActivity(intent)
+            }
+            R.id.open_street_map -> {
+                val intent = Intent(this, OpenStreetMapsActivity::class.java)
+                val bundle = Bundle()
+                bundle.putParcelable("location", latestLocation)
+                intent.putExtra("locationBundle", bundle)
+                startActivity(intent)
+            }
+            /*R.id.settings -> {
+                val intent = Intent(this, SettingsActivity::class.java)
+                startActivity(intent)
+            }*/
+        }
+        drawerLayout.closeDrawer(GravityCompat.START)
+        return true
     }
 }
