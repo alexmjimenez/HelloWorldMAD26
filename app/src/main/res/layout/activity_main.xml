@@ -19,30 +19,17 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Switch
             android:id="@+id/locationSwitch"
             android:layout_width="wrap_content"
             android:layout_height="40dp"
-            android:layout_marginBottom="16dp"
+            android:layout_marginTop="12dp"
             android:text="Enable location"
-            app:layout_constraintBottom_toTopOf="@+id/userIdentifierButton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-
-        <Button
-            android:id="@+id/userIdentifierButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="120dp"
-            android:backgroundTint="#E65100"
-            android:text="Enter User ID"
-            android:textColor="#FFFFFF"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/mainTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

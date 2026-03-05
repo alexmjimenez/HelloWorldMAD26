@@ -22,7 +22,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
-import org.intellij.lang.annotations.Identifier
 
 class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNavigationItemSelectedListener {
     private val TAG = "btaMainActivity"
@@ -39,10 +38,12 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
 
         Log.d(TAG, "onCreate: The activity is being created.");
 
-        val userIdentifier=getUserIdentifier()
-        if(userIdentifier==null){
+        val userIdentifier = getUserIdentifier()
+        if(userIdentifier == null) {
             showUserIdentifier()
-        }else{
+        } else {
+            val textView: TextView = findViewById(R.id.mainTextView)
+            textView.text = "Hello $userIdentifier!"
             Toast.makeText(this,"User ID: $userIdentifier",Toast.LENGTH_SHORT).show()
         }
 
@@ -63,11 +64,6 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         toggle.syncState()
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        val userIdentifierButton: Button = findViewById(R.id.userIdentifierButton)
-        userIdentifierButton.setOnClickListener {
-            showUserIdentifier()
-        }
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         startLocationUpdates()
