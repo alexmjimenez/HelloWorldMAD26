@@ -17,15 +17,15 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/mapButton" />
+        app:layout_constraintTop_toBottomOf="@+id/EditButton" />
 
     <Button
-        android:id="@+id/mapButton"
+        android:id="@+id/EditButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:backgroundTint="#E65100"
-        android:text="Map"
+        android:text="Edit location"
         android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/homeButton"
@@ -39,7 +39,7 @@
         android:backgroundTint="#E65100"
         android:text="Home"
         android:textColor="@color/white"
-        app:layout_constraintEnd_toStartOf="@+id/mapButton"
+        app:layout_constraintEnd_toStartOf="@+id/EditButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

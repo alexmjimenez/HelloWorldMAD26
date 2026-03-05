@@ -36,9 +36,9 @@ class ThirdActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate: The activity is being created.");
 
-        val buttonNext: Button = findViewById(R.id.mapButton)
+        val buttonNext: Button = findViewById(R.id.EditButton)
         buttonNext.setOnClickListener {
-            val intent = Intent(this, SecondActivity::class.java)
+            val intent = Intent(this, FourthActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -93,6 +93,16 @@ class ThirdActivity : AppCompatActivity() {
             latitudeTextView.text = formatCoordinate(item[1].toDouble())
             longitudeTextView.text = formatCoordinate(item[2].toDouble())
             altitudeTextView.text = formatCoordinate(item[3].toDouble())
+
+            view.setOnClickListener {
+                val intent = Intent(context, FourthActivity::class.java).apply {
+                    putExtra("timestamp", item[0])
+                    putExtra("latitude", item[1])
+                    putExtra("longitude", item[2])
+                    putExtra("altitude", item[3])
+                }
+                context.startActivity(intent)
+            }
 
             return view
         }
