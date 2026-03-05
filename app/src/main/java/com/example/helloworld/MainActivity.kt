@@ -185,10 +185,10 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
                 intent.putExtra("locationBundle", bundle)
                 startActivity(intent)
             }
-            /*R.id.settings -> {
+            R.id.settings -> {
                 val intent = Intent(this, SettingsActivity::class.java)
                 startActivity(intent)
-            }*/
+            }
         }
         drawerLayout.closeDrawer(GravityCompat.START)
         return true
