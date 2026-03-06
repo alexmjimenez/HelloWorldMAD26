@@ -160,14 +160,14 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
             val userInput=input.text.toString()
             if(userInput.isNotBlank()){
                 saveUserIdentifier(userInput)
-                android.widget.Toast.makeText(this,"User ID saved: $userInput", android.widget.Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"User ID saved: $userInput", Toast.LENGTH_LONG).show()
             }else{
-                android.widget.Toast.makeText(this,"User ID cannot be blank", android.widget.Toast.LENGTH_LONG).show()
+                Toast.makeText(this,"User ID cannot be blank", Toast.LENGTH_LONG).show()
             }
         }
         builder.setNegativeButton("Cancel"){ dialog, which ->
             dialog.cancel()
-            android.widget.Toast.makeText(this,"Bye!!!", android.widget.Toast.LENGTH_LONG).show()
+            Toast.makeText(this,"Bye!!!", Toast.LENGTH_LONG).show()
         }
         builder.show()
     }
@@ -192,7 +192,7 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         val lonStr = String.format(java.util.Locale.US,"%.4f",longitude)
         val altStr = String.format(java.util.Locale.US,"%.4f",altitude)
 
-        file.appendText("$timestamp;$latStr;$lonStr;$altStr\n")
+        file.appendText("$timestamp, $latStr, $lonStr, $altStr\n")
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

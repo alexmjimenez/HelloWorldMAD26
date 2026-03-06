@@ -59,10 +59,21 @@ class ThirdActivity : AppCompatActivity() {
 
         //Display the file contents
         val listView: ListView = findViewById(R.id.lvFileContents)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, readFileLines())
-        listView.adapter = adapter
         val headerView = layoutInflater.inflate(R.layout.listview_header, null)
         listView.addHeaderView(headerView, null, false)
+
+        val mutCoords = mutableListOf<List<String>>()
+        for (line in readFileLines()) {
+            mutCoords.add(line.split(",").map {
+                it.trim()
+            })
+        }
+
+        val coords: List<List<String>> = mutCoords
+
+        Log.d(TAG, "Datos obtenidos de Room: $coords")
+        val adapter = CoordinatesAdapter(this@ThirdActivity, coords)
+        listView.adapter = adapter
     }
 
     fun readFileLines(): List<String> {
