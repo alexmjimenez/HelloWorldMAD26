@@ -95,8 +95,8 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
             lon = latestLocation!!.longitude
             Log.d(TAG, "onResume: Reading last coordinates -> $lat, $lon")
         } else {
-            lat = 40.38982289563083
-            lon = -3.627826205293675
+            lat = 40.3898
+            lon = -3.6278
             Log.d(TAG, "onResume: Coordinates not read yet. Using default coordinates -> $lat, $lon")
         }
     }

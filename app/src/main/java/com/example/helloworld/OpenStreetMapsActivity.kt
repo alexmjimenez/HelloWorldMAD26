@@ -9,10 +9,18 @@ import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import android.graphics.drawable.BitmapDrawable
+import android.util.Log
+import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import org.osmdroid.views.overlay.Polyline
 
 class OpenStreetMapsActivity : AppCompatActivity() {
+    private val TAG = "btaOpenStreetMapActivity"
+
+    private lateinit var map: MapView
+
     val gymkhanaCoords = listOf(
         GeoPoint(40.38779608214728, -3.627687914352839), // Tennis
         GeoPoint(40.38788595319803, -3.627048250272035), // Futsal outdoors
@@ -37,16 +45,25 @@ class OpenStreetMapsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate: Starting activity...")
+
+        enableEdgeToEdge()
+        setContentView(R.layout.activity_open_street_maps)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
+            insets
+        }
+
         Configuration.getInstance().userAgentValue = packageName
         Configuration.getInstance().load(this,getSharedPreferences("osmdroid", MODE_PRIVATE))
-        setContentView(R.layout.activity_open_street_maps)
 
-        val map= findViewById<MapView>(R.id.map)
+        map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
 
-        val lat = intent.getDoubleExtra("LAT", 40.3894)
-        val lon = intent.getDoubleExtra("LON", -3.6266)
+        val lat = intent.getDoubleExtra("LAT", 40.3897)
+        val lon = intent.getDoubleExtra("LON", -3.6278)
         val mapController = map.controller
         mapController.setZoom(18.0)
         val startPoint = GeoPoint(lat,lon)
@@ -55,7 +72,7 @@ class OpenStreetMapsActivity : AppCompatActivity() {
         val marker = Marker(map)
         marker.position = startPoint
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
-        marker.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_compass) as BitmapDrawable
+        marker.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_secure) as BitmapDrawable
         marker.title = "My current location"
         map.overlays.add(marker)
 

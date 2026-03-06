@@ -19,7 +19,7 @@ class SecondActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.myRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         val lugares = listOf(
-            MyItem(1, "Campus Sur UPM", 40.3894, -3.6266),
+            MyItem(1, "Campus Sur UPM", 40.3897, -3.6278),
             MyItem(2, "Puerta del Sol", 40.4167, -3.7033),
             MyItem(3, "Retiro", 40.4153, -3.6839)
         )
