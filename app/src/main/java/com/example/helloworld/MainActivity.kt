@@ -25,6 +25,7 @@ import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
+import java.sql.Time
 
 class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNavigationItemSelectedListener {
     private val TAG = "btaMainActivity"
@@ -139,6 +140,7 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         val textView: TextView = findViewById(R.id.mainTextView)
         val locationText = getString(R.string.location_text, location.latitude, location.longitude)
         textView.text = locationText
+        saveCoordinatesToFile(location.latitude, location.longitude, location.altitude)
 
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
@@ -182,13 +184,13 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         return sharedPreferences.getString("userIdentifier",null)
     }
 
-    private fun saveCoordinatesToFile(latitude: Double,longitude: Double,altitude: Double){
+    private fun saveCoordinatesToFile(latitude: Double, longitude: Double, altitude: Double){
         val fileName="gps_coordinates.csv"
         val file=java.io.File(filesDir,fileName)
         val timestamp=System.currentTimeMillis()
-        val latStr=String.format(java.util.Locale.US, "%.4f",latitude)
-        val lonStr=String.format(java.util.Locale.US,"%.4f",longitude)
-        val altStr=String.format(java.util.Locale.US,"%.4f",altitude)
+        val latStr = String.format(java.util.Locale.US, "%.4f",latitude)
+        val lonStr = String.format(java.util.Locale.US,"%.4f",longitude)
+        val altStr = String.format(java.util.Locale.US,"%.4f",altitude)
 
         file.appendText("$timestamp;$latStr;$lonStr;$altStr\n")
     }
