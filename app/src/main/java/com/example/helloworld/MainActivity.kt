@@ -22,7 +22,9 @@ import androidx.core.view.GravityCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.navigation.NavigationView
+import kotlinx.coroutines.launch
 
 class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNavigationItemSelectedListener {
     private val TAG = "btaMainActivity"
@@ -82,6 +84,23 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        val lat: Double
+        val lon: Double
+
+        if (latestLocation != null) {
+            lat = latestLocation!!.latitude
+            lon = latestLocation!!.longitude
+            Log.d(TAG, "onResume: Reading last coordinates -> $lat, $lon")
+        } else {
+            lat = 40.38982289563083
+            lon = -3.627826205293675
+            Log.d(TAG, "onResume: Coordinates not read yet. Using default coordinates -> $lat, $lon")
+        }
+    }
+
     private fun startLocationUpdates() {
         if (ActivityCompat.checkSelfPermission(
                 this,
@@ -121,6 +140,7 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         val textView: TextView = findViewById(R.id.mainTextView)
         val locationText = getString(R.string.location_text, location.latitude, location.longitude)
         textView.text = locationText
+
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
     }
