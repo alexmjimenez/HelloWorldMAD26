@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.Button
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
     private val TAG = "btaMainActivity"
     private lateinit var locationManager: LocationManager
     private val locationPermissionCode = 2
+    private lateinit var locationSwitch: Switch
     var latestLocation: Location? = null
 
     private lateinit var drawerLayout: DrawerLayout
@@ -67,6 +69,17 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
         startLocationUpdates()
+
+        locationSwitch = findViewById(R.id.locationSwitch)
+        locationSwitch.setOnCheckedChangeListener { _, isChecked ->
+            if (isChecked) {
+                locationSwitch.text = "Disable location"
+                startLocationUpdates()
+            } else {
+                locationSwitch.text = "Enable location"
+                stopLocationUpdates()
+            }
+        }
     }
 
     private fun startLocationUpdates() {
@@ -88,6 +101,10 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         }
     }
 
+    private fun stopLocationUpdates() {
+        locationManager.removeUpdates(this)
+    }
+
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         if (requestCode == locationPermissionCode) {
@@ -106,10 +123,6 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         textView.text = locationText
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
-        val recordSwitch: android.widget.Switch=findViewById(R.id.locationSwitch)
-        if(recordSwitch.isChecked){
-            saveCoordinatesToFile(location.latitude,location.longitude,location.altitude)
-        }
     }
 
     private fun showUserIdentifier(){

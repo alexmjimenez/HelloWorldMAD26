@@ -10,12 +10,12 @@
         android:icon="@drawable/map_24"/>
     <item
         android:id="@+id/second_activity"
-        android:title="Locations"
-        android:icon="@drawable/location_24"/>
+        android:title="Places"
+        android:icon="@drawable/location_city_24"/>
     <item
         android:id="@+id/third_activity"
-        android:title="Info"
-        android:icon="@drawable/info_24"/>
+        android:title="Locations"
+        android:icon="@drawable/location_24"/>
     <item
         android:id="@+id/settings"
         android:title="Settings"
