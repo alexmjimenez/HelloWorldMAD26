@@ -70,7 +70,6 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        startLocationUpdates()
 
         locationSwitch = findViewById(R.id.locationSwitch)
         locationSwitch.setOnCheckedChangeListener { _, isChecked ->
