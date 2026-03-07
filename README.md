@@ -13,10 +13,16 @@
 * **Map Control:** The map receives the coordinates via an Intent, configures itself dynamically, sets an appropriate zoom level, and automatically centers on the user's selected point using GeoPoint
 
 ## Week 4
-* **Data Persistence:** Implemented an AlertDialog that prompts for a User ID upon opening the app. This ID is saved using SharedPreferences to greet the user in future sessions without asking again.
+* **Data Persistence:** Implemented an AlertDialog that prompts for a User ID upon opening the app. This ID is saved to greet the user in future sessions without asking again.
 * **File Storage:** The app records the user's location history in gps_coordinates.csv file. 
 * **Recording Features:** The recorded data includes Latitude, Longitude, Altitude, and a Timestamp. A Switch was added to the main screen to easily enable or disable this recording feature.
 * **Custom App Icon:** Replaced the default Android green robot with a custom launcher icon using Asset Studio.
+
+## Week 5
+* **Navigation Menu:** Replaced the basic navigating buttons with a professional Navigation Drawer to manage app navigation smoothly from a side menu
+* **Settings Activity:** Created a SettingsActivity that allows the user to display and edit their User ID
+* **Custom ListView:** Upgraded the data reading feature. The raw .csv text file is now parsed and displayed in a structured, multi-column ListView using a custom ArrayAdapter (showing Date, Latitude, Longitude, and Altitude).
+* **List Item Interaction:** Enabled touch events for every list item in the coordinates log.
 
 ## Demo
 The following video shows the app's functionality
