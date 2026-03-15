@@ -8,7 +8,7 @@ import androidx.room.Update
 @Dao
 interface IPlacesDao {
     @Insert
-    suspend fun insert(coordinates: PlacesEntity)
+    suspend fun insert(places: PlacesEntity)
 
     @Query("SELECT * FROM places")
     suspend fun getAll(): List<PlacesEntity>
@@ -20,7 +20,7 @@ interface IPlacesDao {
     fun deleteWithName(name: String)
 
     @Update
-    suspend fun updatePlace(coordinates: PlacesEntity)
+    suspend fun updatePlace(places: PlacesEntity)
 
     @Query("SELECT * FROM places WHERE name = :name LIMIT 1")
     suspend fun getPlaceByName(name: String): PlacesEntity?

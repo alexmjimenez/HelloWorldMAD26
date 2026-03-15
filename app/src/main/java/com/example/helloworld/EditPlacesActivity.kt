@@ -9,13 +9,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 
-class FourthActivity : AppCompatActivity() {
+class EditPlacesActivity : AppCompatActivity() {
     private val TAG = "btaFourthActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_fourth)
+        setContentView(R.layout.activity_edit_places)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -33,7 +33,7 @@ class FourthActivity : AppCompatActivity() {
 
         val previousButton: Button = findViewById(R.id.previousButton)
         previousButton.setOnClickListener {
-            startActivity(Intent(this, ThirdActivity::class.java))
+            startActivity(Intent(this, HistorialActivity::class.java))
             finish()
         }
 

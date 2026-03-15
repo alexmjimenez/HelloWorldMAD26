@@ -19,7 +19,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelloWorld">
         <activity
-            android:name=".FourthActivity"
+            android:name=".EditPlacesActivity"
             android:exported="false" />
         <activity
             android:name=".SettingsActivity"
@@ -28,10 +28,10 @@
             android:name=".OpenStreetMapsActivity"
             android:exported="false" />
         <activity
-            android:name=".ThirdActivity"
+            android:name=".HistorialActivity"
             android:exported="false" />
         <activity
-            android:name=".SecondActivity"
+            android:name=".PlacesActivity"
             android:exported="false" />
         <activity
             android:name=".MainActivity"

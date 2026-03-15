@@ -7,10 +7,11 @@ import android.content.pm.PackageManager
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
-import android.widget.Button
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
@@ -23,9 +24,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.lifecycle.lifecycleScope
+import com.example.helloworld.room.AppDatabase
+import com.example.helloworld.room.PlacesEntity
 import com.google.android.material.navigation.NavigationView
 import kotlinx.coroutines.launch
-import java.sql.Time
 
 class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNavigationItemSelectedListener {
     private val TAG = "btaMainActivity"
@@ -144,6 +146,22 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
 
         val toastText = "New location: ${location.latitude}, ${location.longitude}, ${location.altitude}"
         Toast.makeText(this, toastText, Toast.LENGTH_SHORT).show()
+
+        //If the database doesn't have data, it will create 3 default places
+        val db = AppDatabase.getDatabase(this)
+        var countItems = 0
+
+        lifecycleScope.launch {
+            //countItems = db.placesDao().getCount()
+        }
+
+        if (countItems == 0) {
+            savePlaceToDatabase("Campus Sur UPM", "School", "Campus where computer science is studied", 40.3897, -3.6278, 650.0, System.currentTimeMillis())
+            savePlaceToDatabase("Puerta del Sol", "City", "a square in the Spanish city of Madrid", 40.4167, -3.7033, 650.0, System.currentTimeMillis())
+            savePlaceToDatabase("Retiro", "Park", "A beautiful park with high trees", 40.4153, -3.6839, 650.0, System.currentTimeMillis())
+        }
+
+        Log.d(TAG, "countItems in database: ${countItems}.")
     }
 
     private fun showUserIdentifier(){
@@ -195,17 +213,34 @@ class MainActivity : AppCompatActivity(), LocationListener, NavigationView.OnNav
         file.appendText("$timestamp, $latStr, $lonStr, $altStr\n")
     }
 
+    //PLACES
+    private fun savePlaceToDatabase(name: String, type: String, description: String, latitude: Double, longitude: Double, altitude: Double, timestamp: Long) {
+        val places = PlacesEntity(
+            name = name,
+            type = type,
+            description = description,
+            timestamp = timestamp,
+            latitude = latitude,
+            longitude = longitude,
+            altitude = altitude
+        )
+        val db = AppDatabase.getDatabase(this)
+        lifecycleScope.launch {
+            db.placesDao().insert(places)
+        }
+    }
+
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.home -> {
                 // Handle home action
             }
             R.id.second_activity -> {
-                val intent = Intent(this, SecondActivity::class.java)
+                val intent = Intent(this, PlacesActivity::class.java)
                 startActivity(intent)
             }
             R.id.third_activity -> {
-                val intent = Intent(this, ThirdActivity::class.java)
+                val intent = Intent(this, HistorialActivity::class.java)
                 startActivity(intent)
             }
             R.id.open_street_map -> {

@@ -21,13 +21,13 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ThirdActivity : AppCompatActivity() {
+class HistorialActivity : AppCompatActivity() {
     private val TAG = "btaThirdActivity"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
-        setContentView(R.layout.activity_third)
+        setContentView(R.layout.activity_historial)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -38,7 +38,7 @@ class ThirdActivity : AppCompatActivity() {
 
         val buttonNext: Button = findViewById(R.id.EditButton)
         buttonNext.setOnClickListener {
-            val intent = Intent(this, FourthActivity::class.java)
+            val intent = Intent(this, EditPlacesActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -72,7 +72,7 @@ class ThirdActivity : AppCompatActivity() {
         val coords: List<List<String>> = mutCoords
 
         Log.d(TAG, "Datos obtenidos de Room: $coords")
-        val adapter = CoordinatesAdapter(this@ThirdActivity, coords)
+        val adapter = CoordinatesAdapter(this@HistorialActivity, coords)
         listView.adapter = adapter
     }
 
@@ -106,7 +106,7 @@ class ThirdActivity : AppCompatActivity() {
             altitudeTextView.text = formatCoordinate(item[3].toDouble())
 
             view.setOnClickListener {
-                val intent = Intent(context, FourthActivity::class.java).apply {
+                val intent = Intent(context, EditPlacesActivity::class.java).apply {
                     putExtra("timestamp", item[0])
                     putExtra("latitude", item[1])
                     putExtra("longitude", item[2])
