@@ -35,18 +35,20 @@ class MainActivity : AppCompatActivity(), LocationListener {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            insets
+        }
+
         Log.d(TAG, "onCreate: The activity is being created.");
+
         val userIdentifier = getUserIdentifier()
         val tvWelcome: TextView = findViewById(R.id.tvWelcome)
         if(userIdentifier == null) {
             showUserIdentifier()
         } else {
             tvWelcome.text = "Hello $userIdentifier!"
-        }
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
-            insets
         }
         val btnSettings: ImageView = findViewById(R.id.btnSettings)
         btnSettings.setOnClickListener {
@@ -55,8 +57,8 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.second_activity -> startActivity(Intent(this, PlacesActivity::class.java))
-                R.id.third_activity -> startActivity(Intent(this, HistorialActivity::class.java))
+                R.id.places_activity -> startActivity(Intent(this, PlacesActivity::class.java))
+                R.id.historial_activity -> startActivity(Intent(this, HistorialActivity::class.java))
                 R.id.settings -> startActivity(Intent(this, SettingsActivity::class.java))
                 R.id.open_street_map -> {
                     val intent = Intent(this, OpenStreetMapsActivity::class.java)
@@ -170,14 +172,14 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun saveUserIdentifier(userIdentifier: String){
-        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
+        val sharedPreferences=this.getSharedPreferences("AppPreferences",MODE_PRIVATE)
         sharedPreferences.edit().apply(){
             putString("userIdentifier",userIdentifier)
             apply()
         }
     }
     private fun getUserIdentifier(): String?{
-        val sharedPreferences=this.getSharedPreferences("AppPreferences",android.content.Context.MODE_PRIVATE)
+        val sharedPreferences=this.getSharedPreferences("AppPreferences",MODE_PRIVATE)
         return sharedPreferences.getString("userIdentifier",null)
     }
 

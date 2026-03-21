@@ -16,22 +16,33 @@ class EditPlacesActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_edit_places)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.previousButton)) { v, insets ->
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
         }
+
         val placeName = intent.getStringExtra("name") ?: ""
+        val type = intent.getStringExtra("type") ?: ""
+        val description = intent.getStringExtra("description") ?: ""
         val latitude = intent.getStringExtra("latitude") ?: "0.0"
         val longitude = intent.getStringExtra("longitude") ?: "0.0"
+
         val etPlaceName = findViewById<EditText>(R.id.etPlaceName)
-        val tvPlaceCoords = findViewById<TextView>(R.id.tvPlaceCoords)
+        val etType = findViewById<EditText>(R.id.etType)
+        val etDescription = findViewById<EditText>(R.id.etDescription)
+        val etLatitude = findViewById<EditText>(R.id.etLatitude)
+        val etLongitude = findViewById<EditText>(R.id.etLongitude)
+
         val btnSave = findViewById<Button>(R.id.btnSavePlace)
         val btnDelete = findViewById<Button>(R.id.btnDeletePlace)
         val btnBack = findViewById<Button>(R.id.previousButton)
+
         etPlaceName.setText(placeName)
-        tvPlaceCoords.text = "Latitude: $latitude\nLongitude: $longitude"
+        etType.setText(type)
+        etDescription.setText(description)
+        etLatitude.setText(latitude)
+        etLongitude.setText(longitude)
 
         btnBack.setOnClickListener {
             finish()

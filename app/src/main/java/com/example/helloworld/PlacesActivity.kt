@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -22,8 +23,8 @@ class PlacesActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        enableEdgeToEdge()
         setContentView(R.layout.activity_places)
-
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
@@ -39,6 +40,7 @@ class PlacesActivity : AppCompatActivity() {
                 listOf(
                     it.name,
                     it.type,
+                    it.description,
                     it.latitude.toString(),
                     it.longitude.toString(),
                     it.altitude.toString(),
@@ -64,18 +66,20 @@ class PlacesActivity : AppCompatActivity() {
 
             view.setOnClickListener {
                 val intent = Intent(context, OpenStreetMapsActivity::class.java).apply {
-                    putExtra("LAT", item[2].toDoubleOrNull() ?: 0.0)
-                    putExtra("LON", item[3].toDoubleOrNull() ?: 0.0)
+                    putExtra("LAT", item[3].toDoubleOrNull() ?: 0.0)
+                    putExtra("LON", item[4].toDoubleOrNull() ?: 0.0)
                     putExtra("NAME", item[0])
                 }
                 context.startActivity(intent)
             }
+
             view.setOnLongClickListener {
                 val intent = Intent(context, EditPlacesActivity::class.java).apply {
                     putExtra("name", item[0])
                     putExtra("type", item[1])
-                    putExtra("latitude", item[2])
-                    putExtra("longitude", item[3])
+                    putExtra("description", item[2])
+                    putExtra("latitude", item[3])
+                    putExtra("longitude", item[4])
                 }
                 context.startActivity(intent)
                 true

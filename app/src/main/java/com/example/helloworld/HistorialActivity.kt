@@ -36,18 +36,10 @@ class HistorialActivity : AppCompatActivity() {
 
         Log.d(TAG, "onCreate: The activity is being created.");
 
-        val buttonNext: Button = findViewById(R.id.EditButton)
-        buttonNext.setOnClickListener {
+        val editButton: Button = findViewById(R.id.EditButton)
+        editButton.setOnClickListener {
             val intent = Intent(this, EditPlacesActivity::class.java)
             startActivity(intent)
-            finish()
-        }
-
-        val buttonToThird: Button = findViewById(R.id.homeButton)
-        buttonToThird.setOnClickListener {
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-            finish()
         }
 
         val bundle = intent.getBundleExtra("locationBundle")

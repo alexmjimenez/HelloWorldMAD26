@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/home"
         android:title="Home"
@@ -9,15 +11,16 @@
         android:title="Map"
         android:icon="@drawable/map_24"/>
     <item
-        android:id="@+id/second_activity"
+        android:id="@+id/places_activity"
         android:title="Places"
         android:icon="@drawable/location_city_24"/>
     <item
-        android:id="@+id/third_activity"
-        android:title="Locations"
-        android:icon="@drawable/location_24"/>
+        android:id="@+id/historial_activity"
+        android:icon="@drawable/location_24"
+        android:title="Records" />
     <item
         android:id="@+id/settings"
+        android:icon="@drawable/settings_24"
         android:title="Settings"
-        android:icon="@drawable/settings_24"/>
+        android:visible="false" />
 </menu>
