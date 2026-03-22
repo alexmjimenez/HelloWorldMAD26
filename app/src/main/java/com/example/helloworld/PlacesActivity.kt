@@ -2,12 +2,14 @@ package com.example.helloworld
 
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -31,6 +33,8 @@ class PlacesActivity : AppCompatActivity() {
             insets
         }
 
+        Log.d(TAG, "onCreate: The activity is being created.");
+
         val listView: ListView = findViewById(R.id.lvPlace)
         val db = AppDatabase.getDatabase(this)
 
@@ -49,6 +53,20 @@ class PlacesActivity : AppCompatActivity() {
             }
             val adapter = PlacesAdapter(this@PlacesActivity, roomPlaces)
             listView.adapter = adapter
+        }
+
+        val bundle = intent.getBundleExtra("locationBundle")
+        val location: Location? = bundle?.getParcelable("location")
+
+        val editButton: Button = findViewById(R.id.editButton)
+        editButton.setOnClickListener {
+            val intent = Intent(this, EditPlacesActivity::class.java)
+            if (location != null) {
+                val bundle = Bundle()
+                bundle.putParcelable("location", location)
+                intent.putExtra("locationBundle", bundle)
+            }
+            startActivity(intent)
         }
     }
 

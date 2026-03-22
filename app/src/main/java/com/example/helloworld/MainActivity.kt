@@ -57,7 +57,13 @@ class MainActivity : AppCompatActivity(), LocationListener {
         val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_navigation)
         bottomNav.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.places_activity -> startActivity(Intent(this, PlacesActivity::class.java))
+                R.id.places_activity -> {
+                    val intent = Intent(this, PlacesActivity::class.java)
+                    val bundle = Bundle()
+                    bundle.putParcelable("location", latestLocation)
+                    intent.putExtra("locationBundle", bundle)
+                    startActivity(intent)
+                }
                 R.id.historial_activity -> startActivity(Intent(this, HistorialActivity::class.java))
                 R.id.settings -> startActivity(Intent(this, SettingsActivity::class.java))
                 R.id.open_street_map -> {
