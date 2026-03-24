@@ -190,13 +190,17 @@ class MainActivity : AppCompatActivity(), LocationListener {
     }
 
     private fun saveCoordinatesToFile(latitude: Double, longitude: Double, altitude: Double){
-        val fileName="gps_coordinates.csv"
-        val file=java.io.File(filesDir,fileName)
-        val timestamp=System.currentTimeMillis()
-        val latStr = String.format(java.util.Locale.US, "%.4f",latitude)
-        val lonStr = String.format(java.util.Locale.US,"%.4f",longitude)
-        val altStr = String.format(java.util.Locale.US,"%.4f",altitude)
-        file.appendText("$timestamp, $latStr, $lonStr, $altStr\n")
+        try {
+            val fileName = "gps_coordinates.csv"
+            val file = java.io.File(filesDir, fileName)
+            val timestamp = System.currentTimeMillis()
+            val latStr = String.format(java.util.Locale.US, "%.4f", latitude)
+            val lonStr = String.format(java.util.Locale.US, "%.4f", longitude)
+            val altStr = String.format(java.util.Locale.US, "%.4f", altitude)
+            file.appendText("$timestamp, $latStr, $lonStr, $altStr\n")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error guardando el archivo CSV: ${e.message}")
+        }
     }
 
     private fun savePlaceToDatabase(name: String, type: String, description: String, latitude: Double, longitude: Double, altitude: Double, timestamp: Long) {

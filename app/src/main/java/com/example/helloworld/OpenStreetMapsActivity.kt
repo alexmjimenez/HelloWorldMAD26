@@ -10,11 +10,18 @@ import org.osmdroid.views.MapView
 import org.osmdroid.views.overlay.Marker
 import android.graphics.drawable.BitmapDrawable
 import android.util.Log
+import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.core.content.ContextCompat
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import org.osmdroid.views.overlay.Polyline
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.json.JSONObject
+import java.net.URL
 
 class OpenStreetMapsActivity : AppCompatActivity() {
     private val TAG = "btaOpenStreetMapActivity"
@@ -46,7 +53,6 @@ class OpenStreetMapsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate: Starting activity...")
-
         enableEdgeToEdge()
         setContentView(R.layout.activity_open_street_maps)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -57,28 +63,48 @@ class OpenStreetMapsActivity : AppCompatActivity() {
 
         Configuration.getInstance().userAgentValue = packageName
         Configuration.getInstance().load(this,getSharedPreferences("osmdroid", MODE_PRIVATE))
-
         map = findViewById(R.id.map)
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.setMultiTouchControls(true)
-
         val lat = intent.getDoubleExtra("LAT", 40.3897)
         val lon = intent.getDoubleExtra("LON", -3.6278)
         val mapController = map.controller
         mapController.setZoom(18.0)
         val startPoint = GeoPoint(lat,lon)
         mapController.setCenter(startPoint)
-
         val marker = Marker(map)
         marker.position = startPoint
         marker.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM)
         marker.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_secure) as BitmapDrawable
-        marker.title = "My current location"
+        marker.title = "Selected location"
         map.overlays.add(marker)
 
-        // Add list of markers
         addGymkhanaMarkers(map, gymkhanaCoords, gymkhanaNames, this)
         addRouteMarkers(map, gymkhanaCoords, gymkhanaNames, this)
+        obtenerTiempoAtmosferico(lat, lon)
+    }
+
+    private fun obtenerTiempoAtmosferico(lat: Double, lon: Double) {
+        val apiKey = "3e6cb458858bbbc6f173401b67ceca53"
+        val url = "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey&units=metric&lang=es"
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val response = URL(url).readText()
+                val jsonObject = JSONObject(response)
+                val main = jsonObject.getJSONObject("main")
+                val temp = main.getDouble("temp").toInt()
+                val weatherArray = jsonObject.getJSONArray("weather")
+                val description = weatherArray.getJSONObject(0).getString("description")
+                val cityName = jsonObject.getString("name")
+                withContext(Dispatchers.Main) {
+                    findViewById<TextView>(R.id.tvTemperature).text = "$temp °C"
+                    findViewById<TextView>(R.id.tvWeatherDesc).text = description.replaceFirstChar { it.uppercase() }
+                    findViewById<TextView>(R.id.tvCityName).text = cityName
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error obteniendo el tiempo: ${e.message}")
+            }
+        }
     }
 
     fun addGymkhanaMarkers(map: MapView, coords: List<GeoPoint>, names: List<String>, context: Context) {
