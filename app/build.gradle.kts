@@ -1,13 +1,12 @@
- plugins {
-     alias(libs.plugins.android.application)
-     id("com.google.devtools.ksp")
+plugins {
+    alias(libs.plugins.android.application)
+    id("com.google.devtools.ksp")
+    id("com.google.gms.google-services")
 }
 
 android {
     namespace = "com.example.helloworld"
-    compileSdk {
-        version = release(36)
-    }
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.example.helloworld"
@@ -51,4 +50,7 @@ dependencies {
     implementation("androidx.room:room-runtime:2.8.4")
     implementation("androidx.room:room-ktx:2.8.4")
     ksp("androidx.room:room-compiler:2.8.4")
+
+    // Import the Firebase BoM
+    implementation(platform("com.google.firebase:firebase-bom:34.11.0"))
 }
