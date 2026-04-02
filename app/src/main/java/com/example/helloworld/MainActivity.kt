@@ -23,6 +23,10 @@ import com.example.helloworld.room.AppDatabase
 import com.example.helloworld.room.PlacesEntity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import kotlinx.coroutines.launch
+import com.google.firebase.auth.FirebaseAuth
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import android.app.Activity
 
 class MainActivity : AppCompatActivity(), LocationListener {
     private val TAG = "btaMainActivity"
@@ -31,8 +35,23 @@ class MainActivity : AppCompatActivity(), LocationListener {
     private lateinit var locationSwitch: Switch
     var latestLocation: Location? = null
 
+    private lateinit var auth: FirebaseAuth
+
+    companion object {
+        private const val RC_SIGN_IN = 123
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Initialize Firebase Auth
+        auth = FirebaseAuth.getInstance()
+
+        // Init authentication flow if user is not signed in
+        if (auth.currentUser == null) {
+            launchSignInFlow()
+        }
+
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
@@ -73,6 +92,10 @@ class MainActivity : AppCompatActivity(), LocationListener {
                     intent.putExtra("locationBundle", bundle)
                     startActivity(intent)
                 }
+                R.id.action_logout -> {
+                    logout()
+                }
+                else -> super.onOptionsItemSelected(item)
             }
             true
         }
@@ -91,6 +114,9 @@ class MainActivity : AppCompatActivity(), LocationListener {
 
     override fun onResume() {
         super.onResume()
+
+        updateUIWithUsername()
+
         val userIdentifier = getUserIdentifier()
         val tvWelcome: TextView = findViewById(R.id.tvWelcome)
         if (userIdentifier != null) {
@@ -218,4 +244,68 @@ class MainActivity : AppCompatActivity(), LocationListener {
             db.placesDao().insert(places)
         }
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == RC_SIGN_IN) {
+            val response = IdpResponse.fromResultIntent(data)
+            if (resultCode == Activity.RESULT_OK) {
+                // user login succeeded
+                val user = FirebaseAuth.getInstance().currentUser
+                Toast.makeText(this, R.string.signed_in, Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "onActivityResult " + getString(R.string.signed_in));
+            } else {
+                // user login failed
+                if (response == null) {
+                    // User pressed back button
+                    Log.d(TAG, "Sign in cancelled by user")
+                } else {
+                    Log.e(TAG, "Error starting auth session: ${response.error?.errorCode}, ${response.error?.message}")
+                }
+                Toast.makeText(this, R.string.signed_cancelled, Toast.LENGTH_SHORT).show();
+                // Avoid finishing the activity if it's just a cancellation or a minor error, 
+                // but if we require login to proceed, we might still want to finish or handle it.
+                if (auth.currentUser == null) {
+                    finish()
+                }
+            }
+        }
+    }
+
+    private fun launchSignInFlow() {
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setAvailableProviders(providers)
+                .build(),
+            RC_SIGN_IN
+        )
+    }
+
+    private fun logout() {
+        AuthUI.getInstance()
+            .signOut(this)
+            .addOnCompleteListener {
+                // Restart activity after finishing
+                val intent = Intent(this, MainActivity::class.java)
+                // Clean back stack so that user cannot retake activity after logout
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+                finish()
+            }
+    }
+
+    private fun updateUIWithUsername() {
+        val user = FirebaseAuth.getInstance().currentUser
+        val userNameTextView: TextView? = findViewById(R.id.userNameTextView)
+        user?.let {
+            val name = user.displayName ?: "No Name"
+            userNameTextView?.text = "\uD83E\uDD35\u200D♂\uFE0F " + name
+        }
+    }
+
 }

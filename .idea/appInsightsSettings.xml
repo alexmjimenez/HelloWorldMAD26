@@ -9,7 +9,7 @@
               <option name="connection">
                 <ConnectionSetting>
                   <option name="appId" value="com.example.helloworld" />
-                  <option name="mobileSdkAppId" value="1:580697830901:android:d76559dd7d2ad1f9285cbc" />
+                  <option name="mobileSdkAppId" value="1:580697830901:android:e076d723d851157b285cbc" />
                   <option name="projectId" value="helloworld-40476" />
                   <option name="projectNumber" value="580697830901" />
                 </ConnectionSetting>
