@@ -85,8 +85,18 @@ class OpenStreetMapsActivity : AppCompatActivity() {
     }
 
     private fun obtenerTiempoAtmosferico(lat: Double, lon: Double) {
-        val apiKey = "3e6cb458858bbbc6f173401b67ceca53"
+        val sharedPreferences = getSharedPreferences("AppPreferences", Context.MODE_PRIVATE)
+        val apiKey = sharedPreferences.getString("apiKey", "")
+        if (apiKey.isNullOrEmpty()) {
+            Log.e(TAG, "API Key is empty. Add it in settings")
+            lifecycleScope.launch(Dispatchers.Main) {
+                findViewById<TextView>(R.id.tvCityName).text = "API Key is left"
+            }
+            return
+        }
+
         val url = "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey&units=metric&lang=es"
+
         lifecycleScope.launch(Dispatchers.IO) {
             try {
                 val response = URL(url).readText()
