@@ -96,10 +96,23 @@ class OpenStreetMapsActivity : AppCompatActivity() {
                 val weatherArray = jsonObject.getJSONArray("weather")
                 val description = weatherArray.getJSONObject(0).getString("description")
                 val cityName = jsonObject.getString("name")
+                val iconCode= weatherArray.getJSONObject(0).getString("icon")
+                val iconUrl = "https://openweathermap.org/img/wn/$iconCode@2x.png"
+
                 withContext(Dispatchers.Main) {
                     findViewById<TextView>(R.id.tvTemperature).text = "$temp °C"
                     findViewById<TextView>(R.id.tvWeatherDesc).text = description.replaceFirstChar { it.uppercase() }
                     findViewById<TextView>(R.id.tvCityName).text = cityName
+
+                    val imageView= findViewById<android.widget.ImageView>(R.id.ivWeatherIcon)
+                    Log.d(TAG, "Cargar icono: $iconUrl")
+
+                    com.bumptech.glide.Glide.with(this@OpenStreetMapsActivity)
+                        .load(iconUrl)
+                        .centerCrop()
+                        .override(150, 150)
+                        .error(android.R.drawable.ic_dialog_alert)
+                        .into(imageView)
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "Error obteniendo el tiempo: ${e.message}")

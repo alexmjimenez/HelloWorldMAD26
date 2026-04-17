@@ -144,9 +144,9 @@ class EditPlacesActivity : AppCompatActivity() {
             val name = etPlaceName.text.toString()
             val existingPlace = db.placesDao().getPlaceByName(name)
 
-            if (existingPlace != null) {  // ✅ Verifica si existe antes de actualizar
+            if (existingPlace != null) {
                 val updatedPlace = PlacesEntity(
-                    name = name, // Mantener el mismo nombre
+                    name = name,
                     type = etType.text.toString(),
                     description = etDescription.text.toString(),
                     timestamp = existingPlace.timestamp,
