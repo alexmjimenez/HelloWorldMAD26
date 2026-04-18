@@ -131,7 +131,19 @@ class OpenStreetMapsActivity : AppCompatActivity() {
                             marker.icon=ContextCompat.getDrawable(this@OpenStreetMapsActivity, android.R.drawable.ic_menu_delete) as BitmapDrawable
                             marker.title="${place.name} (Trash Can)"
                         } else {
-                            marker.icon=ContextCompat.getDrawable(this@OpenStreetMapsActivity, android.R.drawable.ic_dialog_map) as BitmapDrawable
+                            if (place.type.contains("Park", ignoreCase = true)) {
+                                marker.icon=ContextCompat.getDrawable(this@OpenStreetMapsActivity, android.R.drawable.ic_menu_gallery) as BitmapDrawable
+                            } else if (place.type.contains("Shop", ignoreCase = true)) {
+                                marker.icon=ContextCompat.getDrawable(this@OpenStreetMapsActivity, android.R.drawable.ic_popup_reminder) as BitmapDrawable
+                            } else if (place.type.contains("Taller", ignoreCase = true)) {
+                                marker.icon=ContextCompat.getDrawable(this@OpenStreetMapsActivity, android.R.drawable.ic_menu_preferences) as BitmapDrawable
+                            } else if (place.type.contains("Mail", ignoreCase = true)) {
+                                marker.icon=ContextCompat.getDrawable(this@OpenStreetMapsActivity, android.R.drawable.ic_dialog_email) as BitmapDrawable
+                            } else {
+                                marker.icon=ContextCompat.getDrawable(this@OpenStreetMapsActivity, android.R.drawable.ic_dialog_map) as BitmapDrawable
+                            }
+
+
                             marker.title="${place.name} (Place)"
                         }
                         map.overlays.add(marker)
