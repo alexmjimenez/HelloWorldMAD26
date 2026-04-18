@@ -82,7 +82,7 @@ https://upm365.sharepoint.com/:v:/s/MobileAPPDevelopmentGroup/IQCwnYLH-nNWQr6hcn
 ## Participants
 List of MAD developers:
 * Huili Chen (huili.chen@alumnos.upm.es)
-* Lozano Martín Alex (Alex.mjimenez@alumnos.upm.es)
+* Lozano Martín Alex (alex.mjimenez@alumnos.upm.es)
 
 Workload distribution between members: (50% Huili / 50% Alex).
 * *Alex focused on base app structure, Room Database architecture, GPS sensors integration, dynamic map icons, and Firebase Auth.*
