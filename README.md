@@ -13,9 +13,9 @@ It enhances the experience within its scope by rewarding users with XP (Experien
 ## Screenshots nad navigation
 | Home | Map | Places |
 | :---: | :---: | :---: |
-|<img width="450" height="924" alt="1" src="https://github.com/user-attachments/assets/77a0472c-db01-4eac-aafa-c7b0097f240e" /> Displaying the Gamification Score (XP) and Location Switch.|<img width="450" height="929" alt="image" src="https://github.com/user-attachments/assets/178e67c4-c999-44d7-868f-dada099ac743" /> Icons for trash cans and a real-time weather card.|<img width="446" height="890" alt="3" src="https://github.com/user-attachments/assets/345e08e2-6c19-4808-afde-7c298a3a0078" /> Add, edit and delete places/trash cans|
-| Add new place | Add trash can | Records |
-|<img width="447" height="895" alt="4" src="https://github.com/user-attachments/assets/1363b154-f042-4f73-9b5c-b107c24a2dbb" />|<img width="447" height="932" alt="5" src="https://github.com/user-attachments/assets/1825603d-3991-4ad5-9403-651af209f49a" />|<img width="450" height="925" alt="6" src="https://github.com/user-attachments/assets/373bf910-ea54-4ff7-ab1a-2349224197c0" /> When you enable the location, it will be recording your the GPS coordinates, latitude, longitude...|
+| <img width="250" alt="1" src="https://github.com/user-attachments/assets/77a0472c-db01-4eac-aafa-c7b0097f240e"><br>Displaying the Gamification Score (XP) and Location Switch. | <img width="250" alt="image" src="https://github.com/user-attachments/assets/178e67c4-c999-44d7-868f-dada099ac743"><br>Icons for trash cans and a real-time weather card. | <img width="250" alt="3" src="https://github.com/user-attachments/assets/345e08e2-6c19-4808-afde-7c298a3a0078"><br>Add, edit and delete places/trash cans. |
+| **Add new place** | **Add trash can** | **Records** |
+| <img width="250" alt="4" src="https://github.com/user-attachments/assets/1363b154-f042-4f73-9b5c-b107c24a2dbb"> | <img width="250" alt="5" src="https://github.com/user-attachments/assets/1825603d-3991-4ad5-9403-651af209f49a"> | <img width="250" alt="6" src="https://github.com/user-attachments/assets/373bf910-ea54-4ff7-ab1a-2349224197c0"><br>When enabled, it records your GPS coordinates. |
 
 ## Demo video
 https://upm365.sharepoint.com/:v:/s/MobileAPPDevelopmentGroup/IQCwnYLH-nNWQr6hcnNfafnBAeCEd6Xqk-7FcywgiVxH8B8?e=KzYQnY
@@ -82,7 +82,7 @@ https://upm365.sharepoint.com/:v:/s/MobileAPPDevelopmentGroup/IQCwnYLH-nNWQr6hcn
 ## Participants
 List of MAD developers:
 * Huili Chen (huili.chen@alumnos.upm.es)
-* Lozano Martín Alex (@alumnos.upm.es)
+* Lozano Martín Alex (Alex.mjimenez@alumnos.upm.es)
 
 Workload distribution between members: (50% Huili / 50% Alex).
 * *Alex focused on base app structure, Room Database architecture, GPS sensors integration, dynamic map icons, and Firebase Auth.*
