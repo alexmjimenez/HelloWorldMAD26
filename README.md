@@ -18,6 +18,7 @@ It enhances the experience within its scope by rewarding users with XP (Experien
 |<img width="447" height="895" alt="4" src="https://github.com/user-attachments/assets/1363b154-f042-4f73-9b5c-b107c24a2dbb" />|<img width="447" height="932" alt="5" src="https://github.com/user-attachments/assets/1825603d-3991-4ad5-9403-651af209f49a" />|<img width="450" height="925" alt="6" src="https://github.com/user-attachments/assets/373bf910-ea54-4ff7-ab1a-2349224197c0" /> When you enable the location, it will be recording your the GPS coordinates, latitude, longitude...|
 
 ## Demo video
+https://upm365.sharepoint.com/:v:/s/MobileAPPDevelopmentGroup/IQCwnYLH-nNWQr6hcnNfafnBAeCEd6Xqk-7FcywgiVxH8B8?e=KzYQnY
 
 ## Features
 ### Functional features
