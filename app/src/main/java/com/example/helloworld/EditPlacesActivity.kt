@@ -184,20 +184,27 @@ class EditPlacesActivity : AppCompatActivity() {
 
     private fun addPlace() {
         val db = AppDatabase.getDatabase(this)
+        val firebaseDb=com.google.firebase.database.FirebaseDatabase.getInstance("https://helloworld-40476-default-rtdb.firebaseio.com/").reference
 
         lifecycleScope.launch(Dispatchers.IO) {
+            val timestamp=System.currentTimeMillis()
             val newPlace = PlacesEntity(
                 name = etPlaceName.text.toString(),
                 type = etType.text.toString(),
                 description = etDescription.text.toString(),
-                timestamp = System.currentTimeMillis(),
+                timestamp = timestamp,
                 latitude = etLatitude.text.toString().toDouble(),
                 longitude = etLongitude.text.toString().toDouble(),
                 altitude = (500.0).toString().toDouble()
             )
 
             db.placesDao().insert(newPlace)
-            Log.d(TAG, "✅ Place added: $newPlace")
+            Log.d(TAG, "Place added: $newPlace")
+            firebaseDb.child("places").child(newPlace.name).setValue(newPlace).addOnSuccessListener {
+                Log.d(TAG, "Place uploaded to Firebase")
+            }.addOnFailureListener { e->
+                Log.d(TAG, "Error uploading to Firebase: ${e.message}")
+            }
 
             withContext(Dispatchers.Main) {
                 startActivity(Intent(this@EditPlacesActivity, PlacesActivity::class.java))
