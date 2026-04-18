@@ -2,12 +2,14 @@ package com.example.helloworld
 
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -30,6 +32,19 @@ class PlacesActivity : AppCompatActivity() {
             insets
         }
 
+        val editButton: Button=findViewById(R.id.editButton)
+        val bundle=intent.getBundleExtra("locationBundle")
+        val location: Location?=bundle?.getParcelable("location")
+
+        editButton.setOnClickListener {
+            val intent=Intent(this, EditPlacesActivity::class.java)
+            if (location!=null) {
+                val locBundle=Bundle()
+                locBundle.putParcelable("location", location)
+                intent.putExtra("locationBundle", locBundle)
+            }
+            startActivity(intent)
+        }
         val listView: ListView = findViewById(R.id.lvPlace)
         val db = AppDatabase.getDatabase(this)
         lifecycleScope.launch(Dispatchers.IO) {
