@@ -55,6 +55,11 @@ class HistorialActivity : AppCompatActivity() {
         listView.addHeaderView(headerView, null, false)
 
         val mutCoords = mutableListOf<List<String>>()
+        //Read the file contents
+        if (readFileLines().isEmpty()) {
+            return
+        }
+
         for (line in readFileLines()) {
             mutCoords.add(line.split(",").map {
                 it.trim()
@@ -63,7 +68,7 @@ class HistorialActivity : AppCompatActivity() {
 
         val coords: List<List<String>> = mutCoords
 
-        Log.d(TAG, "Datos obtenidos de Room: $coords")
+        Log.d(TAG, "Datos obtenidos de Csv: $coords")
         val adapter = CoordinatesAdapter(this@HistorialActivity, coords)
         listView.adapter = adapter
     }
