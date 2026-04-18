@@ -42,39 +42,42 @@ class EditPlacesActivity : AppCompatActivity() {
             insets
         }
 
-        val bundle = intent.getBundleExtra("locationBundle")
-        val location: Location? = bundle?.getParcelable("location")
-
-        val placeName = intent.getStringExtra("name") ?: ""
-        val type = intent.getStringExtra("type") ?: ""
-        val description = intent.getStringExtra("description") ?: ""
-        var latitude = intent.getStringExtra("latitude") ?: "0.0"
-        var longitude = intent.getStringExtra("longitude") ?: "0.0"
-
-        //Solo para los que haya recibido por el botón de "Add new place"
-        if (location != null) {
-            latitude = location.latitude.toString()
-            longitude = location.longitude.toString()
-        }
-
-        //Obtener referencias de EditText
         etPlaceName = findViewById(R.id.etPlaceName)
         etType = findViewById(R.id.etType)
         etDescription = findViewById(R.id.etDescription)
         etLatitude = findViewById(R.id.etLatitude)
         etLongitude = findViewById(R.id.etLongitude)
 
-        Log.d(TAG, "Latitude: $latitude, Longitude: $longitude")
+        val bundle = intent.getBundleExtra("locationBundle")
+        val location: Location? = bundle?.getParcelable("location")
+        val isTrashCan = intent.getBooleanExtra("isTrashCan", false)
+        val placeName = intent.getStringExtra("name") ?: ""
+        val type = intent.getStringExtra("type") ?: ""
+        val description = intent.getStringExtra("description") ?: ""
+        var latitude = intent.getStringExtra("latitude") ?: "0.0"
+        var longitude = intent.getStringExtra("longitude") ?: "0.0"
 
-        val btnSave = findViewById<Button>(R.id.btnSavePlace)
-        val btnDelete = findViewById<Button>(R.id.btnDeletePlace)
-        val btnBack = findViewById<Button>(R.id.previousButton)
+        if (location != null) {
+            latitude = location.latitude.toString()
+            longitude = location.longitude.toString()
+        }
+        Log.d(TAG, "Latitude: $latitude, Longitude: $longitude")
 
         etPlaceName.setText(placeName)
         etType.setText(type)
         etDescription.setText(description)
         etLatitude.setText(latitude)
         etLongitude.setText(longitude)
+
+        if (isTrashCan) {
+            etPlaceName.setText("New Trash Can")
+            etType.setText("Trash Can")
+            findViewById<TextView>(R.id.tvEditTitle).text = "Add Trash Can"
+        }
+
+        val btnSave = findViewById<Button>(R.id.btnSavePlace)
+        val btnDelete = findViewById<Button>(R.id.btnDeletePlace)
+        val btnBack = findViewById<Button>(R.id.previousButton)
 
         btnBack.setOnClickListener {
             finish()
@@ -114,7 +117,6 @@ class EditPlacesActivity : AppCompatActivity() {
             db.placesDao().deleteWithName(name)
             Log.d(TAG, "Coordinate with name $name deleted.")
 
-            // Volver a la actividad anterior después de borrar en el hilo principal
             withContext(Dispatchers.Main) {
                 startActivity(Intent(this@EditPlacesActivity, PlacesActivity::class.java))
                 finish()

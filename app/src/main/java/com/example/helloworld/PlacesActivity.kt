@@ -23,6 +23,7 @@ import kotlinx.coroutines.withContext
 
 class PlacesActivity : AppCompatActivity() {
     private val TAG = "btaPlacesActivity"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_places)
@@ -33,6 +34,7 @@ class PlacesActivity : AppCompatActivity() {
         }
 
         val editButton: Button=findViewById(R.id.editButton)
+        val btnAddTrash: Button=findViewById(R.id.btnAddTrash)
         val bundle=intent.getBundleExtra("locationBundle")
         val location: Location?=bundle?.getParcelable("location")
 
@@ -45,6 +47,18 @@ class PlacesActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+        btnAddTrash.setOnClickListener {
+            val intent=Intent(this, EditPlacesActivity::class.java).apply {
+                putExtra("isTrashCan", true)
+            }
+            if(location!=null) {
+                val locBundle=Bundle()
+                locBundle.putParcelable("location", location)
+                intent.putExtra("locationBundle", locBundle)
+            }
+            startActivity(intent)
+        }
+
         val listView: ListView = findViewById(R.id.lvPlace)
         val db = AppDatabase.getDatabase(this)
         lifecycleScope.launch(Dispatchers.IO) {
