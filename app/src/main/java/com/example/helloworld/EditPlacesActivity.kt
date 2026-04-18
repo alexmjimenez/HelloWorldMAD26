@@ -70,9 +70,9 @@ class EditPlacesActivity : AppCompatActivity() {
         etLongitude.setText(longitude)
 
         if (isTrashCan) {
-            etPlaceName.setText("New Trash Can")
-            etType.setText("Trash Can")
-            findViewById<TextView>(R.id.tvEditTitle).text = "Add Trash Can"
+            etPlaceName.setText("New trash can")
+            etType.setText("Trash can")
+            findViewById<TextView>(R.id.tvEditTitle).text = "Add trash can"
         }
 
         val btnSave = findViewById<Button>(R.id.btnSavePlace)

@@ -22,7 +22,9 @@ import androidx.lifecycle.lifecycleScope
 import com.example.helloworld.room.AppDatabase
 import com.example.helloworld.room.PlacesEntity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import com.google.firebase.auth.FirebaseAuth
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
@@ -132,6 +134,24 @@ class MainActivity : AppCompatActivity(), LocationListener {
             lat = 40.3898
             lon = -3.6278
             Log.d(TAG, "onResume: Coordinates not read yet. Using default coordinates -> $lat, $lon")
+        }
+        actualizarPuntos()
+    }
+
+    private fun actualizarPuntos() {
+        val db=AppDatabase.getDatabase(this)
+        val tvScore=findViewById<TextView>(R.id.tvScore)
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            try {
+                val userPlaces=db.placesDao().getAll()
+                val totalPuntos=userPlaces.size * 10
+                withContext(Dispatchers.Main) {
+                    tvScore?.text="Score: $totalPuntos XP"
+                }
+            } catch (e: Exception) {
+                Log.e(TAG, "Error calculating the score: ${e.message}")
+            }
         }
     }
 
