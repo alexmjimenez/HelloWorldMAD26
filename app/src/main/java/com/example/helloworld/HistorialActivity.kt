@@ -56,14 +56,17 @@ class HistorialActivity : AppCompatActivity() {
 
         val mutCoords = mutableListOf<List<String>>()
         //Read the file contents
-        if (readFileLines().isEmpty()) {
+        val lines = readFileLines()
+        if (lines.isEmpty()) {
             return
         }
 
-        for (line in readFileLines()) {
-            mutCoords.add(line.split(",").map {
-                it.trim()
-            })
+        for (line in lines) {
+            if (line.isNotBlank()) {
+                mutCoords.add(line.split(",").map {
+                    it.trim()
+                })
+            }
         }
 
         val coords: List<List<String>> = mutCoords
@@ -79,7 +82,8 @@ class HistorialActivity : AppCompatActivity() {
             //Open the file from internal storage
             openFileInput(fileName).bufferedReader().readLines()
         } catch (e: IOException) {
-            listOf("Error reading file: ${e.message}")
+            Log.e(TAG, "Error reading file: ${e.message}")
+            emptyList()
         }
     }
 
@@ -97,19 +101,27 @@ class HistorialActivity : AppCompatActivity() {
             val altitudeTextView: TextView = view.findViewById(R.id.tvAltitude)
 
             val item = coordinatesList[position]
-            timestampTextView.text = formatTimestamp(item[0].toLong())
-            latitudeTextView.text = formatCoordinate(item[1].toDouble())
-            longitudeTextView.text = formatCoordinate(item[2].toDouble())
-            altitudeTextView.text = formatCoordinate(item[3].toDouble())
+            if (item.size >= 4) {
+                try {
+                    timestampTextView.text = formatTimestamp(item[0].toLong())
+                    latitudeTextView.text = formatCoordinate(item[1].toDouble())
+                    longitudeTextView.text = formatCoordinate(item[2].toDouble())
+                    altitudeTextView.text = formatCoordinate(item[3].toDouble())
+                } catch (e: NumberFormatException) {
+                    Log.e("CoordinatesAdapter", "Error parsing values: ${e.message}")
+                }
+            }
 
             view.setOnClickListener {
-                val intent = Intent(context, EditPlacesActivity::class.java).apply {
-                    putExtra("timestamp", item[0])
-                    putExtra("latitude", item[1])
-                    putExtra("longitude", item[2])
-                    putExtra("altitude", item[3])
+                if (item.size >= 4) {
+                    val intent = Intent(context, EditPlacesActivity::class.java).apply {
+                        putExtra("timestamp", item[0])
+                        putExtra("latitude", item[1])
+                        putExtra("longitude", item[2])
+                        putExtra("altitude", item[3])
+                    }
+                    context.startActivity(intent)
                 }
-                context.startActivity(intent)
             }
 
             return view
