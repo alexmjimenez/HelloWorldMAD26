@@ -20,9 +20,25 @@ import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import org.json.JSONObject
-import java.net.URL
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import retrofit2.http.GET
+import retrofit2.http.Query
 
+data class WeatherResponse(val main: MainData, val weather: List<WeatherData>, val name: String)
+data class MainData(val temp:Double)
+data class WeatherData(val description:String, val icon: String)
+
+interface WeatherApiServuce {
+    @GET("data/2.5/weather")
+    suspend fun getCurrentWeather(
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
+        @Query("appid") apiKey: String,
+        @Query("units") units: String = "metric",
+        @Query("lang") lang: String = "es"
+    ): WeatherResponse
+}
 class OpenStreetMapsActivity : AppCompatActivity() {
     private val TAG = "btaOpenStreetMapActivity"
 
@@ -95,18 +111,17 @@ class OpenStreetMapsActivity : AppCompatActivity() {
             return
         }
 
-        val url = "https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lon&appid=$apiKey&units=metric&lang=es"
+        val retrofit=Retrofit.Builder().baseUrl("https://api.openweathermap.org/").addConverterFactory(
+            GsonConverterFactory.create()).build()
+        val apiService=retrofit.create(WeatherApiServuce::class.java)
 
         lifecycleScope.launch(Dispatchers.IO) {
             try {
-                val response = URL(url).readText()
-                val jsonObject = JSONObject(response)
-                val main = jsonObject.getJSONObject("main")
-                val temp = main.getDouble("temp").toInt()
-                val weatherArray = jsonObject.getJSONArray("weather")
-                val description = weatherArray.getJSONObject(0).getString("description")
-                val cityName = jsonObject.getString("name")
-                val iconCode= weatherArray.getJSONObject(0).getString("icon")
+                val response=apiService.getCurrentWeather(lat, lon, apiKey)
+                val temp=response.main.temp.toInt()
+                val description=response.weather[0].description
+                val cityName = response.name
+                val iconCode=response.weather[0].icon
                 val iconUrl = "https://openweathermap.org/img/wn/$iconCode@2x.png"
 
                 withContext(Dispatchers.Main) {
@@ -115,8 +130,6 @@ class OpenStreetMapsActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.tvCityName).text = cityName
 
                     val imageView= findViewById<android.widget.ImageView>(R.id.ivWeatherIcon)
-                    Log.d(TAG, "Cargar icono: $iconUrl")
-
                     com.bumptech.glide.Glide.with(this@OpenStreetMapsActivity)
                         .load(iconUrl)
                         .centerCrop()
@@ -125,7 +138,7 @@ class OpenStreetMapsActivity : AppCompatActivity() {
                         .into(imageView)
                 }
             } catch (e: Exception) {
-                Log.e(TAG, "Error obteniendo el tiempo: ${e.message}")
+                Log.e(TAG, "Error obtaining weather: ${e.message}")
             }
         }
     }
